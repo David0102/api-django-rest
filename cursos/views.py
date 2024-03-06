@@ -5,6 +5,9 @@ from cursos.serializers import CursoSerializer, AvaliacaoSerializer
 from rest_framework import status
 
 
+# API version 2
+
+
 # API version 1
 """
 class CursoAPIView(APIView):
