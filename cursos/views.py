@@ -1,11 +1,29 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework import generics
 from cursos.models import Curso, Avaliacao
 from cursos.serializers import CursoSerializer, AvaliacaoSerializer
-from rest_framework import status
 
 
 # API version 2
+
+# generics.ListCreateAPIView: GET, POST
+class CursosAPIView(generics.ListCreateAPIView):
+    queryset = Curso.objects.all()
+    serializer_class = CursoSerializer
+
+# generics.RetrieveUpdateDestroyAPIView: GET, PUT, DELETE
+class CursoAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Curso.objects.all()
+    serializer_class = CursoSerializer
+
+# generics.ListCreateAPIView: GET, POST
+class AvaliacoesAPIView(generics.ListCreateAPIView):
+    queryset = Avaliacao.objects.all()
+    serializer_class = AvaliacaoSerializer
+
+# generics.RetrieveUpdateDestroyAPIView: GET, PUT, DELETE
+class AvaliacaoAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Avaliacao.objects.all()
+    serializer_class = AvaliacaoSerializer
 
 
 # API version 1
