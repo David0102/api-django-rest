@@ -4,6 +4,9 @@ from cursos.models import Curso, Avaliacao
 from cursos.serializers import CursoSerializer, AvaliacaoSerializer
 from rest_framework import status
 
+
+# API version 1
+"""
 class CursoAPIView(APIView):
     def get(self, request):
         cursos = Curso.objects.all()
@@ -27,3 +30,5 @@ class AvaliacaoAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+"""
