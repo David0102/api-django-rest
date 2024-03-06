@@ -1,29 +1,41 @@
 from rest_framework import generics
 from cursos.models import Curso, Avaliacao
 from cursos.serializers import CursoSerializer, AvaliacaoSerializer
+from django.shortcuts import get_object_or_404
 
 
 # API version 2
 
-# generics.ListCreateAPIView: GET, POST
 class CursosAPIView(generics.ListCreateAPIView):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
 
-# generics.RetrieveUpdateDestroyAPIView: GET, PUT, DELETE
+
 class CursoAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
 
-# generics.ListCreateAPIView: GET, POST
+
 class AvaliacoesAPIView(generics.ListCreateAPIView):
     queryset = Avaliacao.objects.all()
     serializer_class = AvaliacaoSerializer
 
-# generics.RetrieveUpdateDestroyAPIView: GET, PUT, DELETE
+    def get_queryset(self):
+        if self.kwargs.get('curso_pk'):
+            return self.queryset.filter(curso_id=self.kwargs.get('curso_pk'))
+        return self.queryset.all()
+
+
 class AvaliacaoAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Avaliacao.objects.all()
     serializer_class = AvaliacaoSerializer
+
+    def get_object(self):
+        if self.kwargs.get('curso_pk'):
+            return get_object_or_404(self.get_queryset(), curso_id=self.kwargs.get('curso_pk'), 
+                                     pk=self.kwargs.get('avaliacao_pk'))
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs.get('avaliacao_pk'))
+        
 
 
 # API version 1
