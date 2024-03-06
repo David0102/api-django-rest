@@ -1,12 +1,30 @@
 from rest_framework import generics
-from cursos.models import Curso, Avaliacao
-from cursos.serializers import CursoSerializer, AvaliacaoSerializer
 from django.shortcuts import get_object_or_404
+
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from cursos.serializers import CursoSerializer, AvaliacaoSerializer
+from cursos.models import Curso, Avaliacao
 
 
 # API version 2
 
+class CursoViewSet(viewsets.ModelViewSet):
+    queryset = Curso.objects.all()
+    serializer_class = CursoSerializer
 
+    @action(detail=True, methods=['get'])
+    def avaliacoes(self, request, pk=None):
+        curso = self.get_object()
+        serializer = AvaliacaoSerializer(curso.avaliacoes.all(), many=True)
+        return Response(serializer.data)
+
+
+class AvaliacaoViewSet(viewsets.ModelViewSet):
+    queryset = Avaliacao.objects.all()
+    serializer_class = AvaliacaoSerializer
 
 
 
