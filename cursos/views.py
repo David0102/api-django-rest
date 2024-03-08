@@ -5,6 +5,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from .permissions import EhSuperUser
+
 from cursos.serializers import CursoSerializer, AvaliacaoSerializer
 from cursos.models import Curso, Avaliacao
 
@@ -12,6 +14,7 @@ from cursos.models import Curso, Avaliacao
 # API version 2
 
 class CursoViewSet(viewsets.ModelViewSet):
+    permission_classes = (EhSuperUser,)
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
 
