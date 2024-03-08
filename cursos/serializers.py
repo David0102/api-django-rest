@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Curso, Avaliacao
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 class AvaliacaoSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username', required=False)
@@ -16,6 +17,17 @@ class AvaliacaoSerializer(serializers.ModelSerializer):
             'criado',
             'ativo'
         )
+    
+    def validate_avaliacao(self, valor):
+        if valor in range(1, 6):
+            return valor
+        raise serializers.ValidationError('A avaliação precisa ser entre 1 e 5')
+
+    def create(self, validated_data):
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError('Você já avaliou este curso')
 
 class CursoSerializer(serializers.ModelSerializer):
     #avaliacoes = AvaliacaoSerializer(many=True, read_only=True)
@@ -23,6 +35,7 @@ class CursoSerializer(serializers.ModelSerializer):
     #avaliacoes = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='avaliacao-detail')
 
     #avaliacoes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
 
     class Meta:
         model = Curso
