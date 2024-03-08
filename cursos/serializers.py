@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Curso, Avaliacao
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.db import models
 
 class AvaliacaoSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username', required=False)
@@ -19,7 +20,7 @@ class AvaliacaoSerializer(serializers.ModelSerializer):
         )
     
     def validate_avaliacao(self, valor):
-        if valor in range(1, 6):
+        if 1<= valor <= 5:
             return valor
         raise serializers.ValidationError('A avaliação precisa ser entre 1 e 5')
 
@@ -36,7 +37,6 @@ class CursoSerializer(serializers.ModelSerializer):
 
     #avaliacoes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
-
     class Meta:
         model = Curso
         fields = (
@@ -45,8 +45,10 @@ class CursoSerializer(serializers.ModelSerializer):
             'url',
             'criado',
             'ativo',
+            'media_avaliacoes'
             #'avaliacoes'
         )
+    
 
 # extra curso
 class UserSerializer(serializers.ModelSerializer):
