@@ -1,23 +1,34 @@
-from django.urls import path
+from django.urls import path, include
 
 from rest_framework.routers import SimpleRouter
 
 from .views import (
-    CursosAPIView, 
-    AvaliacoesAPIView, 
-    CursoAPIView, 
-    AvaliacaoAPIView,
+    #CursosAPIView, 
+    #AvaliacoesAPIView, 
+    #ursoAPIView, 
+    #AvaliacaoAPIView,
     CursoViewSet,
-    AvaliacaoViewSet
+    AvaliacaoViewSet,
+    UserViewSet,
+    TokenAuth
 )
+
 
 # API version 2
 router = SimpleRouter()
 router.register('cursos', CursoViewSet)
 router.register('avaliacoes', AvaliacaoViewSet)
+router.register('usuarios', UserViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('login', TokenAuth.as_view(), name='login'),
+]
 
 
 # API version 1
+
+"""
 urlpatterns = [
     path('cursos/', CursosAPIView.as_view(), name='cursos'),
     path('cursos/<int:pk>/', CursoAPIView.as_view(), name='curso'),
@@ -26,3 +37,4 @@ urlpatterns = [
     path('avaliacoes/', AvaliacoesAPIView.as_view(), name='avaliacoes'),
     path('avaliacoes/<int:avaliacao_pk>/', AvaliacaoAPIView.as_view(), name='avaliacao')
 ]
+"""
