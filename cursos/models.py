@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Base(models.Model):
     criado = models.DateTimeField(auto_now_add=True)
@@ -22,16 +23,15 @@ class Curso(Base):
 
 class Avaliacao(Base):
     curso = models.ForeignKey(Curso, related_name="avaliacoes", on_delete=models.CASCADE)
-    nome = models.CharField(max_length=255)
-    email = models.EmailField()
+    user = models.ForeignKey(User, related_name="avaliacoes", on_delete=models.CASCADE)
     comentario = models.TextField(blank=True, default="")
     avaliacao = models.DecimalField(max_digits=2, decimal_places=1)
 
     class Meta:
         verbose_name = "Avaliação"
         verbose_name_plural = "Avaliações"
-        unique_together = ["email", "curso"]
+        unique_together = ["user", "curso"]
         ordering = ["id"]
     
     def __str__(self):
-        return f"{self.nome} avaliou o curso {self.curso} com nota {self.avaliacao}"
+        return f"{self.user} avaliou o curso {self.curso} com nota {self.avaliacao}"

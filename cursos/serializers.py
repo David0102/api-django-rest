@@ -3,16 +3,14 @@ from .models import Curso, Avaliacao
 from django.contrib.auth.models import User
 
 class AvaliacaoSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username', required=False)
+
     class Meta:
-        extra_kwargs = {
-            'email': {'write_only': True}
-        }
         model = Avaliacao
         fields = (
             'id',
             'curso',
-            'nome',
-            'email',
+            'user',
             'comentario',
             'avaliacao',
             'criado',

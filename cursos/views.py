@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 
-from cursos.permissions import IsSuperUserAuthNotPost, IsSuperUserAuthNotGet
+from cursos.permissions import IsSuperUserAuthNotPost, IsSuperUserAuthNotGet, IsAuthPost
 from rest_framework.views import APIView
 from rest_framework import exceptions
 from rest_framework.authtoken.models import Token
@@ -67,8 +67,12 @@ class CursoViewSet(viewsets.ModelViewSet):
 
 
 class AvaliacaoViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthPost,)
     queryset = Avaliacao.objects.all()
     serializer_class = AvaliacaoSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 
